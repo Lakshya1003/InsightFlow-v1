@@ -87,6 +87,35 @@ Unlike traditional web applications, Insight Flow requires **zero configuration*
 - **Privacy-First Design:** Data is destroyed the moment the browser tab is closed. 
 - **AI Analytics Without Storage:** Users get the power of an LLM data interpreter without risking their sensitive CSVs in a persistent cloud storage bucket.
 
+<<<<<<< HEAD
+=======
+Insight Flow works best with standard structured business or time-series data (e.g., sales logs, website analytics, user data, etc.). 
+
+To ensure the system works as intended, your CSV **must** contain:
+1. 🗓️ **At least one Date column:** (e.g., `Date`, `Timestamp`, `Created_At`). The system is quite flexible and parses most standard date formats (like `YYYY-MM-DD`, `MM/DD/YYYY`).
+2. 🔢 **At least one Numeric column:** (e.g., `Revenue`, `Sales`, `Quantity`, `Visits`, `Temperature`). Used for KPI generation and primary chart axes.
+
+**Optional but recommended:**
+- 🏷️ **Categorical columns:** (e.g., `Region`, `Product Category`, `Status`, `User Segment`). Used to generate breakdowns, pie charts, and segment analysis.
+
+### Example CSV Structure:
+```csv
+Date,Region,Product,Revenue,Quantity
+2023-01-15,North,Software,1500.50,10
+2023-01-16,South,Hardware,850.00,5
+2023-01-17,North,Hardware,1200.00,8
+```
+
+---
+
+## 🏢 Our Services  **[InsightFlow services](https://insightflowv1.netlify.app/)**
+
+---
+
+## 📊 Direct use  **[InsightFlow v1](https://insightflow-v1.streamlit.app/)**
+
+---
+>>>>>>> 65183c0fa0a16703da780e4743913be8aa4c76bf
 ## 💻 How to Run
 
 ### Prerequisites
