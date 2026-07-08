@@ -1,136 +1,142 @@
-<div align="center">
+# Insight Flow
 
-# 📊 Insight Flow
+**Business Analytics Platform with AI-Assisted Insights**
 
-**AI-Assisted Business Analytics Dashboard**
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://insightflow-v1.streamlit.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/Lakshya1003/InsightFlow-v1)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B.svg?style=for-the-badge&logo=Streamlit&logoColor=white" alt="Streamlit">
-  <img src="https://img.shields.io/badge/Plotly-239120.svg?style=for-the-badge&logo=plotly&logoColor=white" alt="Plotly">
-  <img src="https://img.shields.io/badge/Gemini_AI-8E75B2.svg?style=for-the-badge&logo=google-gemini&logoColor=white" alt="Gemini AI">
-</p>
+## Overview
 
-*A fully customizable, retro desktop-inspired analytics platform that turns raw CSV data into interactive insights and comprehensive PDF reports using the power of Google's Gemini AI.*
+Insight Flow is a lightweight, zero-configuration business analytics platform designed to transform raw tabular data into actionable insights instantly. It empowers business analysts, product managers, and decision-makers to upload CSV datasets, visualize key performance indicators (KPIs), analyze trends, and engage in natural language querying powered by AI—all without writing a single line of SQL or configuring a database. 
 
-<br>
+By prioritizing a privacy-first, stateless architecture, the platform guarantees that sensitive business data is processed entirely in-memory and is never stored on a server.
 
-<!-- USER: Replace this image link with a link to your actual project GIF/screenshot! -->
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-<br><br>
+## 📥 Test Data / Sample CSV
 
-</div>
+To quickly test the capabilities of Insight Flow, you can use our sample dataset. Download it here to upload directly into the live demo or your local environment.
 
----
+**Download Test CSV:** [TEST CSV DOWNLOAD LINK HERE](https://drive.google.com/file/d/1rlOJqRb8kV6wf9foubGprvR4VPgddQ3-/view?usp=sharing)
 
-## 🚀 Overview
-Insight Flow is a fully Python-driven analytics platform that allows users to upload structured CSV business datasets, visualize insights through interactive dashboards, and interact with a context-constrained Gemini AI assistant. 
+## 📸 Screenshots
 
-It features a professional, retro desktop-inspired aesthetic with dynamic UI theme switching and the ability to export complete analytics sessions—including AI chat history—to a stylized PDF report.
+| Landing Page | CSV Upload & Processing |
+|:---:|:---:|
+| <img src="./Project Screenshots/landing_page.png" alt="Landing Page" width="400"/> | <img src="./Project Screenshots/csv_upload.png" alt="CSV Upload" width="400"/> |
 
----
+| Dashboard & Dynamic Charts | AI Chat Assistant |
+|:---:|:---:|
+| <img src="./Project Screenshots/dashboard_charts.png" alt="Dashboard" width="400"/> | <img src="./Project Screenshots/ai_chat.png" alt="AI Chat" width="400"/> |
 
-## ✨ Features
+| PDF Report Export |
+|:---:|
+| <img src="./Project Screenshots/pdf_export.png" alt="PDF Report Output" width="400"/> |
 
-- 📁 **Seamless Data Ingestion:** Upload any structured CSV. The system automatically detects dates, numbers, and categories, handling missing data gracefully.
-- 🎨 **Dynamic Theming Engine:** Change the entire dashboard appearance in real time. Features **6 bespoke themes** that automatically synchronize Plotly charts with the UI:
-  - 🟠 *Normal Default*
-  - 🔵 *Vintage Blue*
-  - 👑 *Royal Gold*
-  - ⬛ *Dark Matte*
-  - 🌫️ *Slate*
-  - 🧊 *Glassmorphism*
-- 📈 **Interactive Visualizations:** Includes fully interactive bar, line, area, pie, donut, scatter, stacked bar charts, histograms, and heatmaps.
-- 🤖 **AI-Assisted Analytics (Gemini API):** An executive summary generator and a dedicated AI chat assistant strictly constrained to the context of the uploaded dataset.
-- 📄 **Executive PDF Export:** Generate professional presentation-ready PDF reports with all-time business KPI overviews, visual charts, and a complete session log of your AI Q&A conversation.
+*(Note: Replace placeholder images in the `./Project Screenshots/` folder)*
 
----
+## 🚀 Key Features
+
+- **Instant CSV Upload:** Seamless ingestion of raw datasets without schema configuration.
+- **Auto KPI Generation:** Deterministic calculation of totals, averages, and aggregations.
+- **Trend Analysis:** Month-over-month and week-over-week performance tracking.
+- **Interactive Charts:** Rich, dynamic visualizations built with Plotly.
+- **AI-Assisted Chat:** Context-aware data querying using the Google Gemini API.
+- **Executive PDF Export:** One-click generation of professional, offline reports.
+- **Dynamic Theme Support:** Clean, customizable aesthetics that sync with chart layouts.
+- **Stateless Processing:** 100% in-memory computation ensuring absolute data privacy.
+
+## 🛠 Engineering Highlights
+
+- **Stateless Architecture:** No persistent database is used. The application relies entirely on temporary memory, maximizing user privacy and eliminating database schema migrations.
+- **Privacy-First In-Memory Processing:** Leverages Streamlit Session State and `io.BytesIO` buffers to parse data, generate charts, and compile PDFs dynamically without ever writing files to a hard drive.
+- **Modular Analytics Pipeline:** Clean separation of concerns between data ingestion, mathematical aggregation, and UI rendering (1200–1400 LOC).
+- **Metadata-Driven AI Context:** Implements strict Context Bounding. The AI is fed deterministic, pre-calculated summaries rather than raw CSV data, heavily mitigating the risk of mathematical hallucinations.
+- **Dynamic Plotly Engine:** A centralized layout engine synchronizes JavaScript-based interactive charts with the active CSS theme system.
+
+## 🏗 Architecture & Workflow
+
+The data flows sequentially through highly decoupled modules:
+
+1. **CSV Upload:** User drops a file; `app.py` captures the memory buffer.
+2. **Data Processing:** `data_processor.py` coerces types, handles missing values, and infers schemas (Dates, Metrics, Categories).
+3. **Analytics Generation:** `analytics_engine.py` executes deterministic Pandas math (grouping, resampling) to extract KPIs.
+4. **Chart Building:** `chart_builder.py` wraps `plotly.express` to generate interactive DOM elements.
+5. **Gemini Chat Assistant:** `gemini_handler.py` merges analytics context with a strict System Prompt to answer user questions securely.
+6. **PDF Export:** `pdf_generator.py` compiles charts, KPIs, and chat history into a downloadable ReportLab PDF.
 
 ## 📂 Folder Structure
 
 ```text
 InsightFlow-v1/
-├── app.py                   # Main Streamlit application
-├── analytics_engine.py      # Business logic & KPI calculations
-├── chart_builder.py         # Dynamic Plotly visualizations
-├── data_processor.py        # CSV parsing & validation
-├── gemini_handler.py        # AI integration & conversation management
-├── pdf_generator.py         # ReportLab-powered PDF exporter
-├── styles.py                # CSS generation & injection
-├── theme_engine.py          # Configuration for the 6 visual themes
+├── app.py                   # Main Streamlit application and state controller
+├── data_processor.py        # CSV parsing, schema inference, and validation
+├── analytics_engine.py      # Deterministic math, KPIs, and aggregations
+├── chart_builder.py         # Plotly visualization wrappers
+├── gemini_handler.py        # Google Gemini API integration and prompt bounds
+├── pdf_generator.py         # ReportLab in-memory PDF compiler
+├── theme_engine.py          # Design system configuration
+├── styles.py                # Dynamic CSS generator
 ├── requirements.txt         # Project dependencies
-├── sample_data.csv          # Example dataset
-├── generate_project_pdf.py  # Utility to export codebase
-├── .env.example             # Environment template
 └── README.md                # Project documentation
 ```
 
----
+## 🌟 Why This Project Is Different
 
-## 📊 CSV Data Format Requirements
+Unlike traditional web applications, Insight Flow requires **zero configuration**. 
+- **No Database:** Eliminates the bottleneck of maintaining SQL schemas or NoSQL collections.
+- **No Authentication:** Frictionless onboarding—users can start analyzing data immediately.
+- **Privacy-First Design:** Data is destroyed the moment the browser tab is closed. 
+- **AI Analytics Without Storage:** Users get the power of an LLM data interpreter without risking their sensitive CSVs in a persistent cloud storage bucket.
 
-Insight Flow works best with standard structured business or time-series data (e.g., sales logs, website analytics, user data, etc.). 
-
-To ensure the system works as intended, your CSV **must** contain:
-1. 🗓️ **At least one Date column:** (e.g., `Date`, `Timestamp`, `Created_At`). The system is quite flexible and parses most standard date formats (like `YYYY-MM-DD`, `MM/DD/YYYY`).
-2. 🔢 **At least one Numeric column:** (e.g., `Revenue`, `Sales`, `Quantity`, `Visits`, `Temperature`). Used for KPI generation and primary chart axes.
-
-**Optional but recommended:**
-- 🏷️ **Categorical columns:** (e.g., `Region`, `Product Category`, `Status`, `User Segment`). Used to generate breakdowns, pie charts, and segment analysis.
-
-### Example CSV Structure:
-```csv
-Date,Region,Product,Revenue,Quantity
-2023-01-15,North,Software,1500.50,10
-2023-01-16,South,Hardware,850.00,5
-2023-01-17,North,Hardware,1200.00,8
-```
-
----
-
----
-
-## 📊 Direct use **[InsightFlow v1](https://insightflow-v1.streamlit.app/)**
-
----
 ## 💻 How to Run
 
 ### Prerequisites
-- **Python 3.8+**
-- **[Gemini API Key](https://aistudio.google.com/app/apikey)** *(Optional, but highly recommended for AI insights and chat features)*
+- Python 3.9+
+- A valid Google Gemini API Key (Optional, for AI Chat)
 
-### Installation
+### Installation & Environment Setup
 
-1. Clone the repository and navigate to the project directory:
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/InsightFlow-v1.git
+   git clone https://github.com/Lakshya1003/InsightFlow-v1.git
    cd InsightFlow-v1
    ```
 
-2. Install the required dependencies:
+2. **Create a virtual environment (Recommended)**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-### Configuration (Optional)
-To automatically connect the AI without typing your key in the dashboard every time:
-
-1. Copy or rename `.env.example` to `.env` (or create a new `.env` file in the root directory).
-2. Add your Gemini API key to the file:
+4. **Environment Variables (Optional)**
+   Create a `.env` file in the root directory and add your Gemini API Key if you want to use the AI chat feature.
    ```env
-   GEMINI_API_KEY=your_actual_api_key_here
+   GEMINI_API_KEY=your_api_key_here
    ```
 
-### 🚀 Running the Application
-Start the Streamlit server by running the following command in your terminal:
+### Run the Application
 ```bash
 streamlit run app.py
 ```
-This will automatically open the dashboard in your default web browser at `http://localhost:8501`.
 
-<div align="center">
-  <br>
-  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-  <br>
-  <i>Built with ❤️ using Python and Streamlit</i>
-</div>
+## 🔮 Future Improvements
+
+- **Large Dataset Optimization:** Migrate from Pandas to Polars or Dask for out-of-core, lazy-evaluation processing to handle multi-gigabyte CSVs.
+- **Advanced Data Cleaning:** Provide a UI layer for users to manually resolve coerced `NaN` values or rename columns.
+- **Multi-File Analytics:** Allow relational mapping between multiple uploaded CSVs.
+- **Optional Authentication Mode:** Implement a lightweight OAuth layer for users who *want* to persist session history securely.
+- **Scheduled Reports:** Add background Celery workers to email PDF reports automatically.
+
+## 📄 License
+
+[ADD LICENSE LINK HERE]
+
+## 📬 Author / Contact
+
+- **GitHub:** [Lakshya1003](https://github.com/Lakshya1003)
+- **LinkedIn:** [ADD LINKEDIN LINK HERE]
+- **Email:** [ADD EMAIL HERE]
