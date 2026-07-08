@@ -31,8 +31,6 @@ To quickly test the capabilities of Insight Flow, you can use our sample dataset
 | :-----------------------------------------------------------------------------------: |
 | <img src="./Project Screenshots/pdf_export.png" alt="PDF Report Output" width="400"/> |
 
-*(Note: Replace placeholder images in the `./Project Screenshots/` folder)*
-
 ## 🚀 Key Features
 
 - **Instant CSV Upload:** Seamless ingestion of raw datasets without schema configuration.
@@ -88,9 +86,6 @@ Unlike traditional web applications, Insight Flow requires **zero configuration*
 - **Privacy-First Design:** Data is destroyed the moment the browser tab is closed.
 - **AI Analytics Without Storage:** Users get the power of an LLM data interpreter without risking their sensitive CSVs in a persistent cloud storage bucket.
 
-<<<<<<< HEAD
-============
-
 Insight Flow works best with standard structured business or time-series data (e.g., sales logs, website analytics, user data, etc.).
 
 To ensure the system works as intended, your CSV **must** contain:
@@ -119,17 +114,10 @@ Date,Region,Product,Revenue,Quantity
 
 ## 📊 Direct use  **[InsightFlow v1](https://insightflow-v1.streamlit.app/)**
 
----
+```
+```
 
->>>>>>> 65183c0fa0a16703da780e4743913be8aa4c76bf
->>>>>>>
->>>>>>
->>>>>
->>>>
->>>
->>
-
-## 💻 How to Run
+💻 How to Run
 
 ### Prerequisites
 
@@ -179,4 +167,7 @@ streamlit run app.py
 ## 📬 Author / Contact
 
 - **GitHub:** [Lakshya1003](https://github.com/Lakshya1003)
-- **LinkedIn: [www.linkedin.com/in/lakshya-raj-malviya](https://www.linkedin.com/in/lakshya-raj-malviya/)**
+- **LinkedIn: [www.linkedin.com/in/lakshya-raj-malviya
+  ```
+  ```
+  ](https://www.linkedin.com/in/lakshya-raj-malviya/)**
