@@ -7,7 +7,7 @@
 
 ## Overview
 
-Insight Flow is a lightweight, zero-configuration business analytics platform designed to transform raw tabular data into actionable insights instantly. It empowers business analysts, product managers, and decision-makers to upload CSV datasets, visualize key performance indicators (KPIs), analyze trends, and engage in natural language querying powered by AI—all without writing a single line of SQL or configuring a database. 
+Insight Flow is a lightweight, zero-configuration business analytics platform designed to transform raw tabular data into actionable insights instantly. It empowers business analysts, product managers, and decision-makers to upload CSV datasets, visualize key performance indicators (KPIs), analyze trends, and engage in natural language querying powered by AI—all without writing a single line of SQL or configuring a database.
 
 By prioritizing a privacy-first, stateless architecture, the platform guarantees that sensitive business data is processed entirely in-memory and is never stored on a server.
 
@@ -19,16 +19,16 @@ To quickly test the capabilities of Insight Flow, you can use our sample dataset
 
 ## 📸 Screenshots
 
-| Landing Page | CSV Upload & Processing |
-|:---:|:---:|
+|                                    Landing Page                                    |                            CSV Upload & Processing                            |
+| :--------------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
 | <img src="./Project Screenshots/landing_page.png" alt="Landing Page" width="400"/> | <img src="./Project Screenshots/csv_upload.png" alt="CSV Upload" width="400"/> |
 
-| Dashboard & Dynamic Charts | AI Chat Assistant |
-|:---:|:---:|
+|                             Dashboard & Dynamic Charts                             |                            AI Chat Assistant                            |
+| :---------------------------------------------------------------------------------: | :----------------------------------------------------------------------: |
 | <img src="./Project Screenshots/dashboard_charts.png" alt="Dashboard" width="400"/> | <img src="./Project Screenshots/ai_chat.png" alt="AI Chat" width="400"/> |
 
-| PDF Report Export |
-|:---:|
+|                                   PDF Report Export                                   |
+| :-----------------------------------------------------------------------------------: |
 | <img src="./Project Screenshots/pdf_export.png" alt="PDF Report Output" width="400"/> |
 
 *(Note: Replace placeholder images in the `./Project Screenshots/` folder)*
@@ -81,24 +81,29 @@ InsightFlow-v1/
 
 ## 🌟 Why This Project Is Different
 
-Unlike traditional web applications, Insight Flow requires **zero configuration**. 
+Unlike traditional web applications, Insight Flow requires **zero configuration**.
+
 - **No Database:** Eliminates the bottleneck of maintaining SQL schemas or NoSQL collections.
 - **No Authentication:** Frictionless onboarding—users can start analyzing data immediately.
-- **Privacy-First Design:** Data is destroyed the moment the browser tab is closed. 
+- **Privacy-First Design:** Data is destroyed the moment the browser tab is closed.
 - **AI Analytics Without Storage:** Users get the power of an LLM data interpreter without risking their sensitive CSVs in a persistent cloud storage bucket.
 
 <<<<<<< HEAD
-=======
-Insight Flow works best with standard structured business or time-series data (e.g., sales logs, website analytics, user data, etc.). 
+============
+
+Insight Flow works best with standard structured business or time-series data (e.g., sales logs, website analytics, user data, etc.).
 
 To ensure the system works as intended, your CSV **must** contain:
+
 1. 🗓️ **At least one Date column:** (e.g., `Date`, `Timestamp`, `Created_At`). The system is quite flexible and parses most standard date formats (like `YYYY-MM-DD`, `MM/DD/YYYY`).
 2. 🔢 **At least one Numeric column:** (e.g., `Revenue`, `Sales`, `Quantity`, `Visits`, `Temperature`). Used for KPI generation and primary chart axes.
 
 **Optional but recommended:**
+
 - 🏷️ **Categorical columns:** (e.g., `Region`, `Product Category`, `Status`, `User Segment`). Used to generate breakdowns, pie charts, and segment analysis.
 
 ### Example CSV Structure:
+
 ```csv
 Date,Region,Product,Revenue,Quantity
 2023-01-15,North,Software,1500.50,10
@@ -115,39 +120,50 @@ Date,Region,Product,Revenue,Quantity
 ## 📊 Direct use  **[InsightFlow v1](https://insightflow-v1.streamlit.app/)**
 
 ---
+
 >>>>>>> 65183c0fa0a16703da780e4743913be8aa4c76bf
+>>>>>>>
+>>>>>>
+>>>>>
+>>>>
+>>>
+>>
+
 ## 💻 How to Run
 
 ### Prerequisites
+
 - Python 3.9+
 - A valid Google Gemini API Key (Optional, for AI Chat)
 
 ### Installation & Environment Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Lakshya1003/InsightFlow-v1.git
    cd InsightFlow-v1
    ```
-
 2. **Create a virtual environment (Recommended)**
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use: venv\Scripts\activate
    ```
-
 3. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
-
 4. **Environment Variables (Optional)**
    Create a `.env` file in the root directory and add your Gemini API Key if you want to use the AI chat feature.
+
    ```env
    GEMINI_API_KEY=your_api_key_here
    ```
 
 ### Run the Application
+
 ```bash
 streamlit run app.py
 ```
@@ -160,12 +176,7 @@ streamlit run app.py
 - **Optional Authentication Mode:** Implement a lightweight OAuth layer for users who *want* to persist session history securely.
 - **Scheduled Reports:** Add background Celery workers to email PDF reports automatically.
 
-## 📄 License
-
-[ADD LICENSE LINK HERE]
-
 ## 📬 Author / Contact
 
 - **GitHub:** [Lakshya1003](https://github.com/Lakshya1003)
-- **LinkedIn:** [ADD LINKEDIN LINK HERE]
-- **Email:** [ADD EMAIL HERE]
+- **LinkedIn: [www.linkedin.com/in/lakshya-raj-malviya](https://www.linkedin.com/in/lakshya-raj-malviya/)**
