@@ -167,7 +167,4 @@ streamlit run app.py
 ## 📬 Author / Contact
 
 - **GitHub:** [Lakshya1003](https://github.com/Lakshya1003)
-- **LinkedIn: [www.linkedin.com/in/lakshya-raj-malviya
-  ```
-  ```
-  ](https://www.linkedin.com/in/lakshya-raj-malviya/)**
+- ***LinkedIn***: [www.linkedin.com/in/lakshya-raj-malviya](https://www.linkedin.com/in/lakshya-raj-malviya/)*
