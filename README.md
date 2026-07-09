@@ -26,7 +26,7 @@ If you'd like to review the final output without running the application, you ca
 
 📥 **Download Sample Analytics Report**
 
-➡️ **[View Sample Report (PDF)]([[GOOGLE_DRIVE_REPORT_LINK_HERE]](https://drive.google.com/file/d/1NpsNHkWJ6f_OBzthuKtYHC5BuXEa7GVc/view?usp=sharing))**
+➡️ **[View Sample Report (PDF)](https://drive.google.com/file/d/1NpsNHkWJ6f_OBzthuKtYHC5BuXEa7GVc/view?usp=sharing)**
 
 
 
