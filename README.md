@@ -17,6 +17,20 @@ To quickly test the capabilities of Insight Flow, you can use our sample dataset
 
 **Download Test CSV:** [TEST CSV DOWNLOAD LINK HERE](https://drive.google.com/file/d/1rlOJqRb8kV6wf9foubGprvR4VPgddQ3-/view?usp=sharing)
 
+
+## 📄 Sample Output Report
+
+Insight Flow automatically generates a professional executive business analytics report summarizing KPIs, trends, AI-assisted insights, and visual analytics.
+
+If you'd like to review the final output without running the application, you can download a sample report below.
+
+📥 **Download Sample Analytics Report**
+
+➡️ **[View Sample Report (PDF)]([[GOOGLE_DRIVE_REPORT_LINK_HERE]](https://drive.google.com/file/d/1NpsNHkWJ6f_OBzthuKtYHC5BuXEa7GVc/view?usp=sharing))**
+
+
+
+> The report was generated using the sample dataset provided in this repository and demonstrates the structure, analytics, charts, and AI-generated executive summary produced by Insight Flow.
 ## 📸 Screenshots
 
 |                                    Landing Page                                    |                            CSV Upload & Processing                            |
