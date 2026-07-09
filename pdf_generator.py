@@ -4,6 +4,7 @@ Professional executive-style PDF reports with AI conversation history.
 Always uses ALL-TIME date range regardless of current dashboard filter.
 """
 import io
+import logging
 from datetime import datetime
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -20,6 +21,27 @@ BRAND_LIGHT = colors.HexColor('#f8fafc')
 BRAND_BORDER = colors.HexColor('#e2e8f0')
 BRAND_ORANGE = colors.HexColor('#e8832a')
 BRAND_CREAM = colors.HexColor('#faf5ee')
+
+logger = logging.getLogger(__name__)
+
+
+def plotly_figure_to_png(fig):
+    """
+    Export a Plotly figure to a PNG ByteIO buffer robustly.
+    
+    This helper exists because Streamlit Community Cloud often lacks a Google Chrome 
+    installation, which Kaleido v1+ requires to render images. Older Kaleido (0.2.1) 
+    bundles Chromium but can still be unstable in headless Linux environments. 
+    This function catches RuntimeError, ChromeNotFoundError, and generic exceptions
+    and provides a graceful fallback rather than crashing the PDF generator.
+    """
+    try:
+        # Attempt to generate image using kaleido
+        img_bytes = fig.to_image(format="png", width=800, height=400, scale=2, engine="kaleido")
+        return io.BytesIO(img_bytes)
+    except Exception as e:
+        logger.error(f"Plotly image export failed: {e}", exc_info=True)
+        return None
 
 
 def _get_styles():
@@ -244,17 +266,18 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
         elements.append(PageBreak())
         elements.append(Paragraph("Visual Analytics", styles['SectionHead']))
         for i, fig in enumerate(chart_figures):
-            try:
-                img_bytes = fig.to_image(format="png", width=800, height=400, scale=2)
-                img_buf = io.BytesIO(img_bytes)
+            img_buf = plotly_figure_to_png(fig)
+            if img_buf is not None:
                 img = Image(img_buf, width=460, height=230)
                 elements.append(img)
                 elements.append(Spacer(1, 14))
-            except Exception as e:
-                import traceback
-                print(f"Failed to render chart {i+1}: {e}")
-                traceback.print_exc()
-                elements.append(Paragraph(f"Chart {i+1} could not be rendered.", styles['BodyText2']))
+            else:
+                logger.warning(f"Chart {i+1} failed to export. Inserting placeholder.")
+                elements.append(Paragraph(
+                    f"<i>[Chart {i+1} could not be rendered due to a server-side image export limitation.]</i>", 
+                    styles['BodyText2']
+                ))
+                elements.append(Spacer(1, 14))
 
     # AI Conversation History
     if chat_history:
