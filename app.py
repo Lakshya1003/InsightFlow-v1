@@ -335,12 +335,15 @@ st.markdown(rwin_open("DATA VISUALIZATION", "📊"), unsafe_allow_html=True)
 
 vc1, vc2 = st.columns(2)
 
+current_figs = []
+
 with vc1:
     try:
+        fig1 = None
         if chart_type == 'Heatmap':
             corr = engine.correlation_matrix(fdf)
             if corr is not None:
-                st.plotly_chart(heatmap(corr), use_container_width=True)
+                fig1 = heatmap(corr)
             else:
                 st.info("Need ≥2 numeric columns.")
         elif chart_type in ('Pie Chart', 'Donut Chart'):
@@ -348,44 +351,53 @@ with vc1:
                 cd = engine.category_breakdown(fdf, sel_metric, sel_cat)
                 if cd is not None:
                     fn = pie_chart if chart_type == 'Pie Chart' else donut_chart
-                    st.plotly_chart(fn(cd.head(10), names=sel_cat, values=sel_metric,
-                        title=f"{sel_metric} by {sel_cat}"), use_container_width=True)
+                    fig1 = fn(cd.head(10), names=sel_cat, values=sel_metric,
+                        title=f"{sel_metric} by {sel_cat}")
             else:
                 st.info("Select a category.")
         elif chart_type == 'Histogram':
-            st.plotly_chart(histogram(fdf, x=sel_metric,
-                title=f"{sel_metric} Distribution"), use_container_width=True)
+            fig1 = histogram(fdf, x=sel_metric,
+                title=f"{sel_metric} Distribution")
         elif chart_type == 'Scatter Plot':
             other = [c for c in meta['numeric_columns'] if c != sel_metric]
             y_col = other[0] if other else sel_metric
-            st.plotly_chart(scatter_plot(fdf, x=sel_metric, y=y_col, color=sel_cat,
-                title=f"{sel_metric} vs {y_col}"), use_container_width=True)
+            fig1 = scatter_plot(fdf, x=sel_metric, y=y_col, color=sel_cat,
+                title=f"{sel_metric} vs {y_col}")
         elif chart_type == 'Stacked Bar Chart':
             if sel_cat:
                 m = fdf.copy()
                 m['_m'] = m[dc].dt.to_period('M').astype(str)
                 g2 = m.groupby(['_m', sel_cat])[sel_metric].sum().reset_index()
-                st.plotly_chart(stacked_bar(g2, x='_m', y=sel_metric, color=sel_cat,
-                    title=f"{sel_metric} by {sel_cat}"), use_container_width=True)
+                fig1 = stacked_bar(g2, x='_m', y=sel_metric, color=sel_cat,
+                    title=f"{sel_metric} by {sel_cat}")
             else:
                 st.info("Select a category.")
         else:
             monthly = engine.monthly_aggregation(fdf, sel_metric)
             fn = CHART_REGISTRY.get(chart_type, bar_chart)
-            st.plotly_chart(fn(monthly, x='month_label', y=sel_metric,
-                title=f"{sel_metric} — Monthly Trend"), use_container_width=True)
+            fig1 = fn(monthly, x='month_label', y=sel_metric,
+                title=f"{sel_metric} — Monthly Trend")
+        
+        if fig1 is not None:
+            st.plotly_chart(fig1, use_container_width=True)
+            current_figs.append(fig1)
     except Exception as e:
         st.error(f"Chart error: {e}")
 
 with vc2:
     try:
+        fig2 = None
         monthly2 = engine.monthly_aggregation(fdf, sel_metric)
         if chart_type != 'Line Chart':
-            st.plotly_chart(line_chart(monthly2, x='month_label', y=sel_metric,
-                title=f"{sel_metric} — Trend Line"), use_container_width=True)
+            fig2 = line_chart(monthly2, x='month_label', y=sel_metric,
+                title=f"{sel_metric} — Trend Line")
         else:
-            st.plotly_chart(bar_chart(monthly2, x='month_label', y=sel_metric,
-                title=f"{sel_metric} — Bar View"), use_container_width=True)
+            fig2 = bar_chart(monthly2, x='month_label', y=sel_metric,
+                title=f"{sel_metric} — Bar View")
+        
+        if fig2 is not None:
+            st.plotly_chart(fig2, use_container_width=True)
+            current_figs.append(fig2)
     except Exception as e:
         st.error(f"Chart error: {e}")
 
@@ -395,11 +407,15 @@ if sel_cat:
     cd = engine.category_breakdown(fdf, sel_metric, sel_cat)
     if cd is not None and len(cd) > 0:
         with cc1:
-            st.plotly_chart(bar_chart(cd.head(15), x=sel_cat, y=sel_metric,
-                title=f"{sel_metric} by {sel_cat}"), use_container_width=True)
+            fig3 = bar_chart(cd.head(15), x=sel_cat, y=sel_metric,
+                title=f"{sel_metric} by {sel_cat}")
+            st.plotly_chart(fig3, use_container_width=True)
+            current_figs.append(fig3)
         with cc2:
-            st.plotly_chart(donut_chart(cd.head(10), names=sel_cat, values=sel_metric,
-                title=f"{sel_cat} Distribution"), use_container_width=True)
+            fig4 = donut_chart(cd.head(10), names=sel_cat, values=sel_metric,
+                title=f"{sel_cat} Distribution")
+            st.plotly_chart(fig4, use_container_width=True)
+            current_figs.append(fig4)
 
 st.markdown(rwin_close(), unsafe_allow_html=True)
 
@@ -489,20 +505,12 @@ with re2:
                 all_kpis = engine.compute_kpis(full_df)
                 all_summary = engine.generate_summary_text(full_df)
                 ai_sum = st.session_state.get('ai_summary', '')
-                figs = []
-                ma = engine.monthly_aggregation(full_df, sel_metric)
-                figs.append(bar_chart(ma, x='month_label', y=sel_metric, title=f"{sel_metric} — Overview"))
-                figs.append(line_chart(ma, x='month_label', y=sel_metric, title=f"{sel_metric} — Trend"))
-                if sel_cat:
-                    ca = engine.category_breakdown(full_df, sel_metric, sel_cat)
-                    if ca is not None:
-                        figs.append(donut_chart(ca.head(10), names=sel_cat, values=sel_metric,
-                            title=f"{sel_metric} by {sel_cat}"))
+                
                 # Pass chat history for PDF export
                 chat_hist = st.session_state.get('chat_history', [])
                 pdf_buf = generate_pdf_report(
                     full_df, dc, meta['numeric_columns'],
-                    meta['categorical_columns'], all_kpis, all_summary, ai_sum, figs,
+                    meta['categorical_columns'], all_kpis, all_summary, ai_sum, current_figs,
                     chat_history=chat_hist if chat_hist else None)
                 st.download_button("⬇️ Download", data=pdf_buf,
                     file_name=f"InsightFlow_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf",

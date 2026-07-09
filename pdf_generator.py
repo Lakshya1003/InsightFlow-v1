@@ -250,7 +250,10 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
                 img = Image(img_buf, width=460, height=230)
                 elements.append(img)
                 elements.append(Spacer(1, 14))
-            except Exception:
+            except Exception as e:
+                import traceback
+                print(f"Failed to render chart {i+1}: {e}")
+                traceback.print_exc()
                 elements.append(Paragraph(f"Chart {i+1} could not be rendered.", styles['BodyText2']))
 
     # AI Conversation History
