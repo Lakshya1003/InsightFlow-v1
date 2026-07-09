@@ -44,6 +44,12 @@ To quickly test the capabilities of Insight Flow, you can use our sample dataset
 
 ## 🛠 Engineering Highlights
 
+<p align="center">
+  <img src="./Project Screenshots/architecture.png" alt="Project Architecture" width="600"/>
+  <br>
+  <em>High-level component architecture of Insight Flow</em>
+</p>
+
 - **Stateless Architecture:** No persistent database is used. The application relies entirely on temporary memory, maximizing user privacy and eliminating database schema migrations.
 - **Privacy-First In-Memory Processing:** Leverages Streamlit Session State and `io.BytesIO` buffers to parse data, generate charts, and compile PDFs dynamically without ever writing files to a hard drive.
 - **Modular Analytics Pipeline:** Clean separation of concerns between data ingestion, mathematical aggregation, and UI rendering (1200–1400 LOC).
@@ -51,6 +57,12 @@ To quickly test the capabilities of Insight Flow, you can use our sample dataset
 - **Dynamic Plotly Engine:** A centralized layout engine synchronizes JavaScript-based interactive charts with the active CSS theme system.
 
 ## 🏗 Architecture & Workflow
+
+<p align="center">
+  <img src="./Project Screenshots/workflow.png" alt="User Workflow" width="700"/>
+  <br>
+  <em>End-to-end user workflow and software interactions</em>
+</p>
 
 The data flows sequentially through highly decoupled modules:
 
@@ -62,6 +74,12 @@ The data flows sequentially through highly decoupled modules:
 6. **PDF Export:** `pdf_generator.py` compiles charts, KPIs, and chat history into a downloadable ReportLab PDF.
 
 ## 📂 Folder Structure
+
+<p align="center">
+  <img src="./Project Screenshots/dependencies.png" alt="File Dependencies" width="450"/>
+  <br>
+  <em>Internal file dependency bubble diagram</em>
+</p>
 
 ```text
 InsightFlow-v1/
