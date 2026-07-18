@@ -74,6 +74,7 @@ If you'd like to review the final output without running the application, you ca
 - **Metadata-Driven AI Context:** Implements strict Context Bounding. The AI is fed deterministic, pre-calculated summaries rather than raw CSV data, heavily mitigating the risk of mathematical hallucinations.
 - **Dynamic Plotly Engine:** A centralized layout engine synchronizes JavaScript-based interactive charts with the active CSS theme system.
 
+
 ## 🏗 Architecture & Workflow
 
 <p align="center">
