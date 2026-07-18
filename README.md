@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="Project Screenshots/insightflow_logo.png" alt="Insight Flow Logo" width="600"/>
+</div>
+
 # Insight Flow
 
 **Business Analytics Platform with AI-Assisted Insights**
