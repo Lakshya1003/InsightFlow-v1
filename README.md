@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="Project Screenshots/insightflow_logo.png" alt="Insight Flow Logo" width="600"/>
+  <img src="Project Screenshots/insightflow_logo.png" alt="Insight Flow Logo" width="135"/>
 </div>
 
 # Insight Flow
@@ -21,7 +21,6 @@ To quickly test the capabilities of Insight Flow, you can use our sample dataset
 
 **Download Test CSV:** [TEST CSV DOWNLOAD LINK HERE](https://drive.google.com/file/d/1rlOJqRb8kV6wf9foubGprvR4VPgddQ3-/view?usp=sharing)
 
-
 ## 📄 Sample Output Report
 
 Insight Flow automatically generates a professional executive business analytics report summarizing KPIs, trends, AI-assisted insights, and visual analytics.
@@ -32,9 +31,8 @@ If you'd like to review the final output without running the application, you ca
 
 ➡️ **[View Sample Report (PDF)](https://drive.google.com/file/d/1NpsNHkWJ6f_OBzthuKtYHC5BuXEa7GVc/view?usp=sharing)**
 
-
-
 > The report was generated using the sample dataset provided in this repository and demonstrates the structure, analytics, charts, and AI-generated executive summary produced by Insight Flow.
+
 ## 📸 Screenshots
 
 |                                    Landing Page                                    |                            CSV Upload & Processing                            |
@@ -73,7 +71,6 @@ If you'd like to review the final output without running the application, you ca
 - **Modular Analytics Pipeline:** Clean separation of concerns between data ingestion, mathematical aggregation, and UI rendering (1200–1400 LOC).
 - **Metadata-Driven AI Context:** Implements strict Context Bounding. The AI is fed deterministic, pre-calculated summaries rather than raw CSV data, heavily mitigating the risk of mathematical hallucinations.
 - **Dynamic Plotly Engine:** A centralized layout engine synchronizes JavaScript-based interactive charts with the active CSS theme system.
-
 
 ## 🏗 Architecture & Workflow
 
@@ -152,6 +149,7 @@ Date,Region,Product,Revenue,Quantity
 ## 📊 Direct use  **[InsightFlow v1](https://insightflow-v1.streamlit.app/)**
 
 ```
+
 ```
 
 💻 How to Run
