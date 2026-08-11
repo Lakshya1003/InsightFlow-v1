@@ -1,14 +1,8 @@
 """
 Insight Flow — Gemini AI Handler
-Context-constrained AI interaction with .env persistence and gemini-2.5-flash.
+Context-constrained AI interaction with session-only API key and gemini-2.5-flash.
 """
-import os
-import google.generativeai as genai
-from dotenv import load_dotenv, set_key
-
-load_dotenv()
-
-ENV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+from google import genai
 
 SYSTEM_PROMPT = """You are the Insight Flow AI Analytics Assistant embedded in a business analytics dashboard.
 
@@ -22,49 +16,53 @@ STRICT RULES:
 7. You do NOT calculate metrics yourself — all numbers come from the analytics engine.
 """
 
+MAX_CONTEXT_CHARS = 100_000
+
 class GeminiHandler:
     def __init__(self):
-        self.model = None
+        self.client = None
         self.connected = False
         self.api_key = None
 
     def connect(self, api_key):
+        """Establish a non-persistent session connection to Gemini."""
+        if not api_key or not api_key.strip():
+            return False, "Invalid API key. Please check your Gemini API key."
+            
+        clean_key = api_key.strip()
+        
         try:
-            genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-2.5-flash')
-            response = model.generate_content("Respond with OK")
+            client = genai.Client(api_key=clean_key)
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents="Respond with OK"
+            )
+            
             if response and response.text:
-                self.model = model
+                self.client = client
+                self.api_key = clean_key
                 self.connected = True
-                self.api_key = api_key
                 return True, "Connected successfully."
         except Exception as e:
+            self.client = None
+            self.api_key = None
             self.connected = False
-            err = str(e)
-            if "API_KEY_INVALID" in err or "invalid" in err.lower():
+            err_str = str(e).lower()
+            if "api_key" in err_str or "invalid" in err_str or "auth" in err_str or "credential" in err_str or "400" in err_str or "401" in err_str or "403" in err_str:
                 return False, "Invalid API key. Please check your Gemini API key."
-            return False, f"Connection failed: {err}"
+            return False, "Unable to connect to Gemini. Please check your API key and network connection."
+            
+        self.client = None
+        self.api_key = None
+        self.connected = False
         return False, "Unknown error during connection."
 
-    def auto_connect_from_env(self):
-        """Attempt silent connection using .env key on startup."""
-        key = os.getenv('GEMINI_API_KEY', '').strip()
-        if key and key != 'your_gemini_api_key_here':
-            return self.connect(key)
-        return False, "No API key found in environment."
-
-    def save_key_to_env(self, api_key):
-        """Persist the API key to the .env file."""
-        try:
-            set_key(ENV_PATH, 'GEMINI_API_KEY', api_key)
-        except Exception:
-            pass
-
-    def generate_summary(self, analytics_text, metadata):
+    def generate_summary(self, sanitized_analytics_context, metadata):
         if not self.connected:
             return "AI is not connected. Please provide a valid Gemini API key."
+            
         context = f"""ANALYTICS CONTEXT:
-{analytics_text}
+{sanitized_analytics_context}
 
 DATASET METADATA:
 - Rows: {metadata.get('total_rows', 'N/A')}
@@ -73,17 +71,25 @@ DATASET METADATA:
 - Categories: {', '.join(metadata.get('categorical_columns', []))}
 
 Generate a concise executive summary of key business insights from this data. Use bullet points. Maximum 150 words."""
-        try:
-            response = self.model.generate_content(SYSTEM_PROMPT + "\n\n" + context)
-            return response.text if response and response.text else "Unable to generate summary."
-        except Exception as e:
-            return f"AI summary generation failed: {str(e)}"
 
-    def ask_question(self, question, analytics_text, metadata):
+        if len(context) > MAX_CONTEXT_CHARS:
+            return "Analytics context is too large for AI summary. Please select a smaller dataset or date range."
+
+        try:
+            response = self.client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=SYSTEM_PROMPT + "\n\n" + context
+            )
+            return response.text if response and response.text else "Unable to generate summary."
+        except Exception:
+            return "Unable to generate AI summary."
+
+    def ask_question(self, question, sanitized_analytics_context, metadata):
         if not self.connected:
             return "AI is not connected. Please provide a valid Gemini API key."
+            
         context = f"""ANALYTICS CONTEXT:
-{analytics_text}
+{sanitized_analytics_context}
 
 DATASET METADATA:
 - Rows: {metadata.get('total_rows', 'N/A')}
@@ -94,13 +100,21 @@ DATASET METADATA:
 USER QUESTION: {question}
 
 Answer ONLY if the question relates to the dataset above. If unrelated, refuse politely. Be concise and analytical."""
+
+        if len(context) > MAX_CONTEXT_CHARS:
+            return "Analytics context is too large to process this question. Please reduce the dataset size."
+
         try:
-            response = self.model.generate_content(SYSTEM_PROMPT + "\n\n" + context)
+            response = self.client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=SYSTEM_PROMPT + "\n\n" + context
+            )
             return response.text if response and response.text else "Unable to process your question."
-        except Exception as e:
-            return f"Error processing question: {str(e)}"
+        except Exception:
+            return "Unable to process your question."
 
     def disconnect(self):
-        self.model = None
+        """Clear session credentials."""
+        self.client = None
         self.connected = False
         self.api_key = None

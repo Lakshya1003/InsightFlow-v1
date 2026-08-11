@@ -62,11 +62,8 @@ def period_html(title, icon, value, detail):
 def get_gemini():
     return st.session_state['gemini_handler']
 
-# Auto-connect from .env
+# Auto-connect removed (BYOK session only)
 if not st.session_state['env_auto_connected']:
-    g = get_gemini()
-    if not g.connected:
-        g.auto_connect_from_env()
     st.session_state['env_auto_connected'] = True
 
 def status_html():
@@ -149,7 +146,6 @@ with st.sidebar:
                 with st.spinner("Validating..."):
                     ok, msg = get_gemini().connect(api_key.strip())
                 if ok:
-                    get_gemini().save_key_to_env(api_key.strip())
                     st.success("✓ " + msg)
                 else:
                     st.error(msg)
