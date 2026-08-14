@@ -18,11 +18,9 @@ from gemini_handler import GeminiHandler
 from pdf_generator import generate_pdf_report
 from info_page import render_info_page
 
-# ─── Page Config ───
 st.set_page_config(page_title="Insight Flow — Business Analytics", page_icon="📊",
                    layout="wide", initial_sidebar_state="expanded")
 
-# ─── Session State ───
 DEFAULTS = {
     'gemini_handler': GeminiHandler(), 'data_processor': DataProcessor(),
     'df': None, 'metadata': None, 'analytics_engine': None,
@@ -38,12 +36,10 @@ for k, v in DEFAULTS.items():
     if k not in st.session_state:
         st.session_state[k] = v
 
-# ─── Apply Theme ───
 active_theme = st.session_state['active_theme']
 st.markdown(get_custom_css(active_theme), unsafe_allow_html=True)
 set_chart_theme(active_theme)
 
-# ─── Retro HTML helpers ───
 WC = '<div class="retro-wc"><div class="retro-wc-btn">─</div><div class="retro-wc-btn">□</div><div class="retro-wc-btn">✕</div></div>'
 
 def rwin_open(title, icon=""):
@@ -58,11 +54,9 @@ def kpi_html(label, value, delta=""):
 def period_html(title, icon, value, detail):
     return f'<div class="period-card"><div class="period-header">{icon} {title}</div><div class="period-body"><div class="period-value">{value}</div><div class="period-detail">{detail}</div></div></div>'
 
-
 def get_gemini():
     return st.session_state['gemini_handler']
 
-# Auto-connect removed (BYOK session only)
 if not st.session_state['env_auto_connected']:
     st.session_state['env_auto_connected'] = True
 
@@ -74,10 +68,6 @@ def status_html():
         return '<span class="status-badge status-disconnected">■ INVALID KEY</span>'
     return '<span class="status-badge status-disabled">□ OFFLINE</span>'
 
-
-# ═══════════════════════════════════════
-#  SIDEBAR — Controls
-# ═══════════════════════════════════════
 def btn_group(options, key, cols_per_row=3):
     """Render a retro button-group selector with CSS-highlighted active button."""
     current = st.session_state.get(key, options[0])
@@ -94,16 +84,14 @@ def btn_group(options, key, cols_per_row=3):
                     st.rerun()
     return st.session_state.get(key, options[0])
 
-
 with st.sidebar:
-    # ══════════ ONBOARDING ══════════
+    
     if st.button("ℹ️ INFO BEFORE YOU START", use_container_width=True, type="secondary"):
         st.session_state['show_info_page'] = True
         st.rerun()
 
     st.markdown('<hr style="border:1px solid rgba(0,0,0,0.15);margin:6px 0;">', unsafe_allow_html=True)
 
-    # ══════════ THEME SELECTOR ══════════
     st.markdown("### 🎨 Appearance")
     current_theme = st.session_state['active_theme']
 
@@ -112,7 +100,6 @@ with st.sidebar:
         is_active = (tname == current_theme)
         swatches = tdata['swatches']
 
-        # Build swatch HTML
         swatch_html = ''.join(
             f'<span style="display:inline-block;width:11px;height:11px;'
             f'background:{c};border:1px solid #333;margin-right:2px;"></span>'
@@ -122,7 +109,6 @@ with st.sidebar:
         btn_type = "primary" if is_active else "secondary"
         label = f"{tdata['icon']} {tname}"
 
-        # Color preview + button in columns
         tc1, tc2 = st.columns([1, 4])
         with tc1:
             st.markdown(f'<div style="padding-top:6px;">{swatch_html}</div>',
@@ -135,7 +121,6 @@ with st.sidebar:
 
     st.markdown('<hr style="border:1px solid rgba(0,0,0,0.15);margin:6px 0;">', unsafe_allow_html=True)
 
-    # ══════════ GEMINI API ══════════
     st.markdown("### 🔑 Gemini API")
     api_key = st.text_input("Key", type="password", placeholder="Enter API key",
                             label_visibility="collapsed", value=get_gemini().api_key or "")
@@ -158,7 +143,6 @@ with st.sidebar:
             st.info("Disconnected.")
     st.markdown('<p class="disclaimer">Users are responsible for monitoring usage associated with their own Gemini API credentials.</p>', unsafe_allow_html=True)
 
-    # ══════════ UPLOAD ══════════
     st.markdown("### 📂 Upload Dataset")
     uploaded = st.file_uploader("CSV", type=['csv'], label_visibility="collapsed")
     if uploaded is not None:
@@ -185,7 +169,6 @@ with st.sidebar:
             except Exception as e:
                 st.error(f"Error: {e}")
 
-    # ══════════ FILTERS ══════════
     if st.session_state['df'] is not None:
         meta = st.session_state['metadata']
 
@@ -215,10 +198,6 @@ with st.sidebar:
             st.markdown("### 🏷️ Category")
             btn_group(meta['categorical_columns'], 'selected_category', cols_per_row=3)
 
-
-# ═══════════════════════════════════════
-#  DATE FILTER HELPER
-# ═══════════════════════════════════════
 def get_filtered_df():
     df = st.session_state['df']
     meta = st.session_state['metadata']
@@ -241,23 +220,16 @@ def get_filtered_df():
         return df
     return filtered
 
-# Chart type mapping
 CHART_MAP = {
     'Bar': 'Bar Chart', 'Line': 'Line Chart', 'Area': 'Area Chart',
     'Pie': 'Pie Chart', 'Donut': 'Donut Chart', 'Scatter': 'Scatter Plot',
     'Stack': 'Stacked Bar Chart', 'Histo': 'Histogram', 'Heat': 'Heatmap',
 }
 
-
-# ═══════════════════════════════════════
-#  MAIN CONTENT
-# ═══════════════════════════════════════
-
 if st.session_state['show_info_page']:
     render_info_page()
     st.stop()
 
-# ── HEADER ──
 st.markdown(f"""
 <div class="header-bar">
     <div class="retro-titlebar">
@@ -275,7 +247,6 @@ st.markdown(f"""
     </div>
 </div>""", unsafe_allow_html=True)
 
-# ── EMPTY STATE ──
 if st.session_state['df'] is None:
     st.markdown("""
     <div class="empty-state">
@@ -286,7 +257,6 @@ if st.session_state['df'] is None:
     </div>""", unsafe_allow_html=True)
     st.stop()
 
-# ── DATA READY ──
 fdf = get_filtered_df()
 meta = st.session_state['metadata']
 engine = st.session_state['analytics_engine']
@@ -296,7 +266,6 @@ sel_cat = st.session_state['selected_category']
 chart_short = st.session_state['selected_chart']
 chart_type = CHART_MAP.get(chart_short, 'Bar Chart')
 
-# ════════════════ KPI SECTION ════════════════
 kpis = engine.compute_kpis(fdf)
 growth = engine.compute_growth(fdf, sel_metric)
 periods = engine.best_worst_periods(fdf, sel_metric)
@@ -317,7 +286,6 @@ for i, col in enumerate(meta['numeric_columns'][:5]):
 
 st.markdown(rwin_close(), unsafe_allow_html=True)
 
-# ════════════════ PERIOD HIGHLIGHTS ════════════════
 p1, p2 = st.columns(2)
 with p1:
     st.markdown(period_html("BEST PERFORMING", "🏆",
@@ -326,7 +294,6 @@ with p2:
     st.markdown(period_html("LOWEST PERFORMING", "📉",
         periods['worst'], f"{sel_metric}: {periods['worst_value']:,.2f}"), unsafe_allow_html=True)
 
-# ════════════════ DATA VISUALIZATION ════════════════
 st.markdown(rwin_open("DATA VISUALIZATION", "📊"), unsafe_allow_html=True)
 
 vc1, vc2 = st.columns(2)
@@ -397,7 +364,6 @@ with vc2:
     except Exception as e:
         st.error(f"Chart error: {e}")
 
-# Category breakdown row
 if sel_cat:
     cc1, cc2 = st.columns(2)
     cd = engine.category_breakdown(fdf, sel_metric, sel_cat)
@@ -415,7 +381,6 @@ if sel_cat:
 
 st.markdown(rwin_close(), unsafe_allow_html=True)
 
-# ════════════════ EXECUTIVE SUMMARY + ASK DATA ════════════════
 sum_col, chat_col = st.columns(2)
 
 with sum_col:
@@ -451,7 +416,6 @@ with chat_col:
                 st.session_state['chat_history'].append(('user', user_q.strip()))
                 st.session_state['chat_history'].append(('ai', answer))
 
-        # Chat history
         if st.session_state['chat_history']:
             chat_html = '<div class="chat-container">'
             for role, msg in st.session_state['chat_history']:
@@ -470,7 +434,6 @@ with chat_col:
         st.markdown('<div class="ai-insight-box"><p>🔒 Connect Gemini to ask questions.</p></div>', unsafe_allow_html=True)
     st.markdown(rwin_close(), unsafe_allow_html=True)
 
-# ════════════════ DATASET INSPECTOR ════════════════
 with st.expander("📋 Dataset Inspector", expanded=False):
     d1, d2 = st.columns(2)
     with d1:
@@ -486,7 +449,6 @@ with st.expander("📋 Dataset Inspector", expanded=False):
         st.markdown(f"**Categorical:** {', '.join(meta['categorical_columns']) if meta['categorical_columns'] else 'None'}")
     st.dataframe(st.session_state['df'].head(), use_container_width=True)
 
-# ════════════════ REPORT EXPORT ════════════════
 st.markdown(rwin_open("REPORT EXPORT", "📄"), unsafe_allow_html=True)
 re1, re2 = st.columns([3, 1])
 with re1:
@@ -502,7 +464,6 @@ with re2:
                 all_summary = engine.generate_summary_text(full_df)
                 ai_sum = st.session_state.get('ai_summary', '')
                 
-                # Pass chat history for PDF export
                 chat_hist = st.session_state.get('chat_history', [])
                 pdf_buf = generate_pdf_report(
                     full_df, dc, meta['numeric_columns'],
@@ -516,7 +477,6 @@ with re2:
                 st.error(f"PDF failed: {e}")
 st.markdown(rwin_close(), unsafe_allow_html=True)
 
-# ── Footer ──
 st.markdown(f"""<div class="retro-footer"><p>
 Insight Flow v1.0 — AI-Assisted Business Analytics Dashboard<br>
 Built with Streamlit • Pandas • Plotly • Gemini AI • ReportLab<br>

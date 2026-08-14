@@ -131,14 +131,11 @@ THEMES = {
 
 DEFAULT_THEME = 'Default'
 
-
 def get_theme(name):
     return THEMES.get(name, THEMES[DEFAULT_THEME])
 
-
 def get_theme_names():
     return list(THEMES.keys())
-
 
 def get_plotly_config(theme_name):
     """Return Plotly layout defaults for the given theme."""

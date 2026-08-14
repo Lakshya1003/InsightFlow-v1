@@ -84,8 +84,6 @@ class DataProcessor:
         for col in self.df.columns:
             if col in self.date_columns or col in self.numeric_columns: continue
             
-            # Use unique ratio and max unique values instead of strict dtype check, 
-            # as Pandas 2.x string/category dtypes vary across environments (e.g. Streamlit Cloud)
             if self.df[col].nunique() / len(self.df) < 0.5 and self.df[col].nunique() <= 200:
                 self.categorical_columns.append(col)
 

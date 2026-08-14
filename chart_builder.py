@@ -8,19 +8,15 @@ import pandas as pd
 import numpy as np
 from theme_engine import get_plotly_config
 
-# Module-level current theme cache
 _current_theme = 'Default'
-
 
 def set_chart_theme(theme_name):
     """Set the active chart theme globally for this module."""
     global _current_theme
     _current_theme = theme_name
 
-
 def _get_config():
     return get_plotly_config(_current_theme)
-
 
 def _layout_defaults():
     cfg = _get_config()
@@ -36,10 +32,8 @@ def _layout_defaults():
                         bordercolor=cfg['hover_border']),
     )
 
-
 def _colors():
     return _get_config()['colors']
-
 
 def _apply_layout(fig, title=""):
     cfg = _get_config()
@@ -54,7 +48,6 @@ def _apply_layout(fig, title=""):
                      tickfont=dict(size=10, color=cfg['tick_color']))
     return fig
 
-
 def _pie_layout(fig, title=""):
     cfg = _get_config()
     fig.update_layout(**_layout_defaults(),
@@ -62,12 +55,10 @@ def _pie_layout(fig, title=""):
                                           family="'VT323', monospace")))
     return fig
 
-
 def bar_chart(df, x, y, title="", color=None):
     fig = px.bar(df, x=x, y=y, color=color, color_discrete_sequence=_colors(),
                  title=title, barmode='group')
     return _apply_layout(fig, title)
-
 
 def line_chart(df, x, y, title="", color=None):
     fig = px.line(df, x=x, y=y, color=color, color_discrete_sequence=_colors(),
@@ -75,12 +66,10 @@ def line_chart(df, x, y, title="", color=None):
     fig.update_traces(line=dict(width=2.5))
     return _apply_layout(fig, title)
 
-
 def area_chart(df, x, y, title="", color=None):
     fig = px.area(df, x=x, y=y, color=color, color_discrete_sequence=_colors(), title=title)
     fig.update_traces(line=dict(width=2))
     return _apply_layout(fig, title)
-
 
 def pie_chart(df, names, values, title=""):
     cfg = _get_config()
@@ -90,7 +79,6 @@ def pie_chart(df, names, values, title=""):
                       hoverinfo='label+percent+value')
     return _pie_layout(fig, title)
 
-
 def donut_chart(df, names, values, title=""):
     cfg = _get_config()
     fig = px.pie(df, names=names, values=values, hole=0.45,
@@ -99,25 +87,21 @@ def donut_chart(df, names, values, title=""):
                       textfont=dict(size=11, color=cfg['font_color']))
     return _pie_layout(fig, title)
 
-
 def scatter_plot(df, x, y, title="", color=None):
     fig = px.scatter(df, x=x, y=y, color=color, color_discrete_sequence=_colors(),
                      title=title, opacity=0.7)
     return _apply_layout(fig, title)
-
 
 def stacked_bar(df, x, y, color, title=""):
     fig = px.bar(df, x=x, y=y, color=color, color_discrete_sequence=_colors(),
                  title=title, barmode='stack')
     return _apply_layout(fig, title)
 
-
 def histogram(df, x, title="", nbins=30):
     fig = px.histogram(df, x=x, nbins=nbins, color_discrete_sequence=[_colors()[0]], title=title)
     cfg = _get_config()
     fig.update_traces(marker_line_color=cfg['axis_color'], marker_line_width=0.5)
     return _apply_layout(fig, title)
-
 
 def heatmap(corr_matrix, title="Correlation Heatmap"):
     cfg = _get_config()
@@ -127,7 +111,6 @@ def heatmap(corr_matrix, title="Correlation Heatmap"):
         text=np.round(corr_matrix.values, 2), texttemplate='%{text}',
         textfont=dict(size=10, color=cfg['font_color'])))
     return _apply_layout(fig, title)
-
 
 CHART_REGISTRY = {
     'Bar Chart': bar_chart, 'Line Chart': line_chart, 'Area Chart': area_chart,

@@ -2,7 +2,7 @@ import streamlit as st
 import textwrap
 
 def render_info_page():
-    # ── Retro HTML helpers ──
+    
     WC = '<div class="retro-wc"><div class="retro-wc-btn">─</div><div class="retro-wc-btn">□</div><div class="retro-wc-btn">✕</div></div>'
 
     def render_panel(title, icon, content_html):
@@ -18,7 +18,6 @@ def render_info_page():
 <div style="margin-bottom: 20px;"></div>"""
         st.markdown(html, unsafe_allow_html=True)
 
-    # ── HEADER ──
     st.markdown(f"""
     <div class="header-bar">
         <div class="retro-titlebar">
@@ -38,7 +37,6 @@ def render_info_page():
     <div style="margin-bottom: 20px;"></div>
     """, unsafe_allow_html=True)
 
-    # ── BACK BUTTON ──
     cc1, cc2, cc3 = st.columns([1, 2, 1])
     with cc2:
         if st.button("🔙 RETURN TO WORKSTATION", use_container_width=True, type="primary"):
@@ -49,7 +47,7 @@ def render_info_page():
     c1, c2 = st.columns([1, 1])
 
     with c1:
-        # SECTION 2 — WHAT THIS SOFTWARE DOES
+        
         render_panel("WHAT THIS SOFTWARE DOES", "⚙️", """
         <p><b>Insight Flow</b> is a lightweight analytical utility designed to reduce time spent in spreadsheets. It enables you to:</p>
         <ul style="margin-left: 20px; line-height: 1.6;">
@@ -65,7 +63,6 @@ def render_info_page():
         </div>
         """)
 
-        # SECTION 4 — AI USAGE POLICY
         render_panel("AI SYSTEM LIMITATIONS", "🤖", """
         <p>The integrated Gemini AI operates under strict boundary conditions:</p>
         <ul style="margin-left: 20px; line-height: 1.6;">
@@ -79,7 +76,6 @@ def render_info_page():
         </div>
         """)
 
-        # SECTION 6 — PRIVACY & SESSION POLICY
         render_panel("STATELESS PRIVACY ARCHITECTURE", "🛡️", """
         <p>Insight Flow is built on a strict privacy-first foundation:</p>
         <ul style="margin-left: 20px; line-height: 1.6;">
@@ -90,7 +86,6 @@ def render_info_page():
         <p style="margin-top: 15px;">This architecture ensures absolute business privacy and security for your sensitive data logs.</p>
         """)
 
-        # SECTION 7 — SOFTWARE LIMITATIONS
         render_panel("SOFTWARE LIMITATIONS", "⚠️", """
         <ul style="margin-left: 20px; line-height: 1.6;">
             <li>Designed for lightweight, exploratory analytics.</li>
@@ -102,7 +97,7 @@ def render_info_page():
         """)
 
     with c2:
-        # SECTION 3 — CSV FORMATTING GUIDE
+        
         render_panel("CSV REQUIREMENTS & FORMATTING", "📄", """
         <p>For the system to automatically extract KPIs and build dashboards, your CSV must meet these structural requirements:</p>
 
@@ -165,7 +160,6 @@ def render_info_page():
         <p><b>❌ Unsupported Data:</b> Unstructured text, PDFs, Images, Scanned documents, Corrupted CSV files.</p>
         """)
 
-        # SECTION 5 — TERMS & CONDITIONS
         render_panel("TERMS & CONDITIONS", "⚖️", """
         <p>By using Insight Flow, you agree to the following lightweight software terms:</p>
         <ul style="margin-left: 20px; line-height: 1.6;">
@@ -177,7 +171,6 @@ def render_info_page():
         </ul>
         """)
 
-    # ── CHECKLIST & START BUTTON ──
     st.markdown("<br>", unsafe_allow_html=True)
     render_panel("BEFORE YOU CONTINUE CHECKLIST", "✅", """
     <div style="font-family: monospace; font-size: 1.1rem; line-height: 1.8;">
@@ -195,7 +188,6 @@ def render_info_page():
             st.session_state['show_info_page'] = False
             st.rerun()
 
-    # ── Footer ──
     st.markdown(f"""<div class="retro-footer" style="margin-top: 30px;"><p>
     Insight Flow v1.0 — System Documentation & Onboarding Utility
     </p></div>""", unsafe_allow_html=True)

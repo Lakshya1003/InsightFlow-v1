@@ -24,7 +24,6 @@ BRAND_CREAM = colors.HexColor('#faf5ee')
 
 logger = logging.getLogger(__name__)
 
-
 def plotly_figure_to_png(fig):
     """
     Export a Plotly figure to a PNG ByteIO buffer robustly.
@@ -36,13 +35,12 @@ def plotly_figure_to_png(fig):
     and provides a graceful fallback rather than crashing the PDF generator.
     """
     try:
-        # Attempt to generate image using kaleido
+        
         img_bytes = fig.to_image(format="png", width=800, height=400, scale=2, engine="kaleido")
         return io.BytesIO(img_bytes)
     except Exception as e:
         logger.error(f"Plotly image export failed: {e}", exc_info=True)
         return None
-
 
 def _get_styles():
     styles = getSampleStyleSheet()
@@ -56,7 +54,7 @@ def _get_styles():
         fontSize=9.5, textColor=BRAND_DARK, leading=14, spaceAfter=6))
     styles.add(ParagraphStyle(name='SmallGray', fontName='Helvetica',
         fontSize=8, textColor=BRAND_GRAY, alignment=TA_CENTER))
-    # Chat-specific styles
+    
     styles.add(ParagraphStyle(name='ChatSectionHead', fontName='Helvetica-Bold',
         fontSize=13, textColor=BRAND_ORANGE, spaceBefore=16, spaceAfter=10))
     styles.add(ParagraphStyle(name='ChatQuestion', fontName='Helvetica-Bold',
@@ -69,13 +67,11 @@ def _get_styles():
         fontSize=8.5, textColor=BRAND_GRAY, spaceAfter=1))
     return styles
 
-
 def _safe_text(text):
     """Escape HTML entities for ReportLab paragraphs."""
     if not text:
         return ""
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
 
 def _build_chat_section(elements, styles, chat_history):
     """Add AI conversation history section to the PDF."""
@@ -87,7 +83,6 @@ def _build_chat_section(elements, styles, chat_history):
     elements.append(HRFlowable(width="100%", thickness=1.5, color=BRAND_ORANGE))
     elements.append(Spacer(1, 10))
 
-    # Group chat into Q&A pairs
     pairs = []
     i = 0
     while i < len(chat_history):
@@ -102,14 +97,13 @@ def _build_chat_section(elements, styles, chat_history):
                 i += 1
             pairs.append((question, answer))
         else:
-            # Standalone AI message (e.g. summary)
+            
             pairs.append(("", msg))
             i += 1
 
     for idx, (question, answer) in enumerate(pairs):
         q_num = idx + 1
 
-        # Build a bordered table for each Q&A pair
         qa_data = []
 
         if question:
@@ -126,7 +120,7 @@ def _build_chat_section(elements, styles, chat_history):
             qa_data.append([
                 Paragraph("<b>AI Response:</b>", styles['ChatLabel']),
             ])
-            # Split long responses into paragraphs
+            
             for line in safe_a.split('\n'):
                 line = line.strip()
                 if line:
@@ -138,7 +132,6 @@ def _build_chat_section(elements, styles, chat_history):
         if qa_data:
             qa_table = Table(qa_data, colWidths=[460])
 
-            # Alternating background for visual separation
             bg_color = BRAND_LIGHT if idx % 2 == 0 else colors.white
 
             table_style = [
@@ -150,7 +143,6 @@ def _build_chat_section(elements, styles, chat_history):
                 ('BOX', (0, 0), (-1, -1), 0.8, BRAND_BORDER),
             ]
 
-            # Add left accent border for questions
             if question:
                 table_style.append(
                     ('LINEBEFOREDECOR', (0, 0), (0, -1), 3, BRAND_ORANGE)
@@ -160,12 +152,10 @@ def _build_chat_section(elements, styles, chat_history):
             elements.append(qa_table)
             elements.append(Spacer(1, 8))
 
-    # Summary line
     elements.append(Spacer(1, 6))
     elements.append(Paragraph(
         f"Total conversations: {len(pairs)} Q&amp;A exchanges",
         styles['SmallGray']))
-
 
 def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
                         kpis, analytics_summary, ai_summary,
@@ -181,7 +171,6 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
     styles = _get_styles()
     elements = []
 
-    # Title
     elements.append(Spacer(1, 40))
     elements.append(Paragraph("Insight Flow", styles['ReportTitle']))
     elements.append(Paragraph("AI-Assisted Business Analytics Report", styles['ReportSubtitle']))
@@ -215,7 +204,6 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
     elements.append(meta_table)
     elements.append(Spacer(1, 20))
 
-    # Executive Summary
     elements.append(Paragraph("Executive Summary", styles['SectionHead']))
     if ai_summary:
         for line in ai_summary.split('\n'):
@@ -228,7 +216,6 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
         elements.append(Paragraph("AI summary not available. Connect Gemini API for insights.", styles['BodyText2']))
     elements.append(Spacer(1, 10))
 
-    # KPI Table
     elements.append(Paragraph("Key Performance Indicators", styles['SectionHead']))
     kpi_rows = [['Metric', 'Total', 'Average', 'Min', 'Max']]
     for col, vals in kpis.items():
@@ -252,7 +239,6 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
     elements.append(kpi_table)
     elements.append(Spacer(1, 12))
 
-    # Analytics Details
     elements.append(Paragraph("Detailed Analytics", styles['SectionHead']))
     for line in analytics_summary.split('\n'):
         line = line.strip()
@@ -261,7 +247,6 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
             elements.append(Paragraph(line, styles['BodyText2']))
     elements.append(Spacer(1, 10))
 
-    # Charts
     if chart_figures:
         elements.append(PageBreak())
         elements.append(Paragraph("Visual Analytics", styles['SectionHead']))
@@ -279,11 +264,9 @@ def generate_pdf_report(df, date_col, numeric_cols, categorical_cols,
                 ))
                 elements.append(Spacer(1, 14))
 
-    # AI Conversation History
     if chat_history:
         _build_chat_section(elements, styles, chat_history)
 
-    # Footer
     elements.append(Spacer(1, 30))
     elements.append(HRFlowable(width="100%", thickness=0.5, color=BRAND_BORDER))
     footer_text = f"Generated by Insight Flow Analytics  {gen_date}  All-Time Analysis"
