@@ -1,5 +1,6 @@
 .env
-__pychache__
+__pycache__/
+.devcontainer/
 Project_Source_Code.pdf
 InsightFlow_Codebase.pdf
 Codebase_Functionality_Overview.md
