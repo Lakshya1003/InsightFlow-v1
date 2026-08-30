@@ -76,6 +76,17 @@ def render_info_page():
         </div>
         """)
 
+        render_panel("DATA PRIVACY & API KEY ADVISORY", "🔐", """
+        <p>When you use Insight Flow, your dataset metadata and queries are sent to Google's Gemini API for AI-powered analysis. The level of data confidentiality depends on the type of API key you use:</p>
+        <ul style="margin-left: 20px; line-height: 1.8;">
+            <li><b>Free-Tier API Key:</b> Google may use your prompts and data to improve its AI models. This means fragments of your business data could potentially be used for model training.</li>
+            <li><b>Paid API Key (Recommended):</b> Under Google's paid API terms of service, your data is <b>not</b> used for model training or improvement. Your prompts and responses remain confidential.</li>
+        </ul>
+        <div style="padding: 12px; border-left: 4px solid var(--accent-blue); background: var(--bg-inner); margin-top: 15px; border-radius: 4px; color: var(--text-dark);">
+            <b>RECOMMENDATION:</b> If your dataset contains sensitive, proprietary, or confidential business information, we strongly recommend using a <b>paid Gemini API key</b> to ensure your data is never used for AI training or model improvement. Your privacy is your responsibility.
+        </div>
+        """)
+
         render_panel("STATELESS PRIVACY ARCHITECTURE", "🛡️", """
         <p>Insight Flow is built on a strict privacy-first foundation:</p>
         <ul style="margin-left: 20px; line-height: 1.6;">
