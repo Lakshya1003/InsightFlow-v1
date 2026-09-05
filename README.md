@@ -9,7 +9,7 @@
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://insightflow-v1.streamlit.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/Lakshya1003/InsightFlow-v1)
 
-### 🚀 Currently having 400+ users of this project!
+### 🚀 Currently having 400+ Clones of this project!
 <img src="Project Screenshots/no_of_current_user.png" alt="400+ Current Users" width="800"/>
 
 ## Overview
