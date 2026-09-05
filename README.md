@@ -9,6 +9,9 @@
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://insightflow-v1.streamlit.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/Lakshya1003/InsightFlow-v1)
 
+### 🚀 Currently having 400+ users of this project!
+<img src="Project Screenshots/no_of_current_user.png" alt="400+ Current Users" width="800"/>
+
 ## Overview
 
 Insight Flow is a lightweight, zero-configuration business analytics platform designed to transform raw tabular data into actionable insights instantly. It empowers business analysts, product managers, and decision-makers to upload CSV datasets, visualize key performance indicators (KPIs), analyze trends, and engage in natural language querying powered by AI—all without writing a single line of SQL or configuring a database.
